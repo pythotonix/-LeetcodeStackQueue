@@ -3,35 +3,28 @@ class FreqStack:
 
     def __init__(self):
         self.q=deque()
+        self.dic={}
 
     def push(self, val: int) -> None:
-        self.q.appendleft(val)
+        self.q.append(val)
+        if val in self.dic:
+            self.dic[val]+=1
+        else:
+            self.dic[val]=1
 
-    def pop(self) -> int:
-        maxfreq_item=0
-        maxfreq=0
-        self.q=self.q
-        set_q=set(self.q)
-        for el in set_q:
-            # print(el)
-            if self.q.count(el)>maxfreq:
-                maxfreq=self.q.count(el)
-                maxfreq_item=el
-                n=self.q.index(el)
-                # print(f'{maxfreq_item=}')
-            elif self.q.count(el)==maxfreq:
-                if self.q.index(el)<self.q.index(maxfreq_item):
-                    maxfreq_item=el
-                    n=self.q.index(el)
-                    # print(f'{maxfreq_item=}')
-        # a=deque(reversed(self.q))
-        self.q.remove(maxfreq_item)
-        # self.q.rotate(-n)
-        # print(f"before popping {self.q=}")
-        # # self.q.remove(maxfreq_item)
-        # self.q.pop()
-        # self.q.rotate(-n)
-        return maxfreq_item
+    def pop(self):
+        max_freq = max(self.dic.values())
+        i = len(self.q) - 1
+        while i >= 0:
+            top = self.q[i]
+            if self.dic[top] == max_freq:
+                self.dic[top] = self.dic[top] - 1
+                el=self.q[i]
+                self.q.reverse()
+                self.q.remove(el)
+                self.q.reverse()
+                return el
+            i = i - 1
 
 
 freqStack = FreqStack()
@@ -42,7 +35,6 @@ freqStack.push(5)
 freqStack.push(7)
 freqStack.push(4)
 freqStack.push(5)
-print(set(freqStack.q))
 print(freqStack.q)
 print(freqStack.pop())
 print(freqStack.q)
